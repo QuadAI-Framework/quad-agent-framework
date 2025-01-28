@@ -19,15 +19,15 @@ npm install @quad/agent-framework
 Here's a simple example of how to create and run an agent:
 
 ```typescript
-import { Agent } from '@quad/agent-framework';
+import { Agent } from "@quad/agent-framework";
 
 const agent = new Agent({
-  apiKey: 'YOUR_API_KEY', 🔑
-  model: 'deepseek-chat', 🤖
+  apiKey: "YOUR_API_KEY",
+  model: "deepseek-chat",
 });
 
-const result = await agent.run('Your prompt here'); 💬
-console.log(result); 📄
+const result = await agent.run("Your prompt here");
+console.log(result);
 ```
 
 ---
@@ -36,8 +36,8 @@ console.log(result); 📄
 
 The `Agent` constructor accepts the following configuration options:
 
-- `apiKey`: Your DeepSeek API key (required) 🔑
-- `model`: The DeepSeek model to use (default: \`'deepseek-chat'\`) 🤖
+- `apiKey`: Your DeepSeek API key (required)
+- `model`: The DeepSeek model to use (default: \`'deepseek-chat'\`)
 
 ---
 
@@ -49,18 +49,18 @@ For more complex scenarios, you can provide a **preamble** and **custom actions*
 import { Agent } from '@quad/agent-framework';
 import { actions } from './your-actions-file';
 
-const preamble = \`Your agent's instructions here\`; 📜
+const preamble = \`Your agent's instructions here\`;
 
 const agent = new Agent(
   {
-    apiKey: 'YOUR_API_KEY', 🔑
-    model: 'deepseek-chat', 🤖
+    apiKey: 'YOUR_API_KEY',
+    model: 'deepseek-chat',
   },
   preamble,
   actions
 );
 
-const result = await agent.run('Your prompt', chatHistory); 💬
+const result = await agent.run('Your prompt', chatHistory);
 ```
 
 ---
@@ -72,9 +72,9 @@ You can define **custom actions** for your agent. Here's an example structure:
 ```typescript
 export const actions = (wallet, imageBlob) => ({
   customAction: async (params) => {
-    // Your action logic here 🛠️
+    // Your action logic here
   },
-  // More actions... 🔄
+  // More actions...
 });
 ```
 
