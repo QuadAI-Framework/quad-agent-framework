@@ -89,13 +89,13 @@ export const actions = (wallet, imageBlob) => ({
 
 #### Constructor
 
-\`\`\`typescript
-new Agent(config: AgentConfig, preamble?: string, actions?: Actions)
-\`\`\`
+```typescript
+new Agent(config: AgentConfig, personality: string, actions?: Actions)
+```
 
 #### Methods
 
-- \`run(prompt: string, chatHistory?: ChatMessage[]): Promise<string>\`  
+- `run(prompt: string, chatHistory?: ChatMessage[]): Promise<string>`  
   Runs the agent with the given prompt and optional chat history. 💬📄
 
 ---
