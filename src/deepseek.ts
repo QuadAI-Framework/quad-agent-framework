@@ -3,6 +3,7 @@ import OpenAI from "openai";
 import {
   ChatCompletionCreateParamsBase,
   ChatCompletionDeveloperMessageParam,
+  ChatCompletionMessageParam,
 } from "openai/resources/chat/completions";
 
 export class DeepSeekProvider implements IDeepSeekProvider {
@@ -23,26 +24,29 @@ export class DeepSeekProvider implements IDeepSeekProvider {
     try {
       const completionRequest: ChatCompletionCreateParamsBase = {
         model: this.model,
-        messages: messages.map((msg) => ({
-          role: msg.role,
-          content: msg.content,
-        })) as ChatCompletionDeveloperMessageParam[],
+        messages: messages as ChatCompletionMessageParam[],
         temperature: request.temperature,
         stream: false,
       };
 
       if (request.actions) {
-        completionRequest.tools = Object.values(request.actions).map(
-          (action) => ({
-            type: "function",
-            function: {
-              name: action.function.name,
-              description: action.function.description,
-              parameters: action.function.parameters as Record<string, unknown>,
-            },
-          })
-        );
-        completionRequest.tool_choice = "auto";
+        const actions = Object.values(request.actions);
+        if (actions.length > 0) {
+          completionRequest.tools = Object.values(request.actions).map(
+            (action) => ({
+              type: "function",
+              function: {
+                name: action.function.name,
+                description: action.function.description,
+                parameters: action.function.parameters as Record<
+                  string,
+                  unknown
+                >,
+              },
+            })
+          );
+          completionRequest.tool_choice = "auto";
+        }
       }
 
       if (request.additionalParams) {

@@ -7,12 +7,18 @@ export interface Action {
     description: string;
     parameters: Record<string, string>;
   };
-  handler: (args: Record<string, any>) => string;
+  handler: (args: Record<string, any>) => Promise<string>;
 }
 
 export interface Actions {
   [key: string]: Action;
 }
+
+type ChatMessage = {
+  role: "assistant" | "tool" | "user" | "system";
+  content: string;
+  tool_call_id?: string;
+};
 
 export interface DeepSeekConfig {
   model: string;
@@ -37,7 +43,7 @@ export interface IAgent {
   temperature?: number;
   maxTokens?: number;
   additionalParams?: Record<string, any>;
-  actions: Record<string, Action>;
+  actions?: Record<string, Action>;
   setPersonality(personality: string): this;
   setTemperature(temperature: number): this;
   setMaxTokens(maxTokens: number): this;
@@ -61,7 +67,7 @@ export interface CompletionParams {
   personality: string;
   chatHistory: ChatHistoryItem[];
   documents: any[];
-  actions: Record<string, Action>;
+  actions?: Record<string, Action>;
   temperature: number;
   maxTokens: number;
   additionalParams: Record<string, any>;

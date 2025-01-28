@@ -21,10 +21,13 @@ Here's a simple example of how to create and run an agent:
 ```typescript
 import { Agent } from "@quad/agent-framework";
 
-const agent = new Agent({
-  apiKey: "YOUR_API_KEY",
-  model: "deepseek-chat",
-});
+const agent = new Agent(
+  {
+    apiKey: "YOUR_API_KEY",
+    model: "deepseek-chat",
+  },
+  "You are a cowboy agent"
+);
 
 const result = await agent.run("Your prompt here");
 console.log(result);
@@ -43,20 +46,20 @@ The `Agent` constructor accepts the following configuration options:
 
 ## 🚀 Advanced Usage
 
-For more complex scenarios, you can provide a **preamble** and **custom actions**:
+For more complex scenarios, you can provide **custom actions**:
 
 ```typescript
 import { Agent } from '@quad/agent-framework';
 import { actions } from './your-actions-file';
 
-const preamble = \`Your agent's instructions here\`;
+const personality = \`Your agent's personality here\`;
 
 const agent = new Agent(
   {
     apiKey: 'YOUR_API_KEY',
     model: 'deepseek-chat',
   },
-  preamble,
+  personality,
   actions
 );
 

@@ -1,5 +1,5 @@
 import { DeepSeekProvider } from "./deepseek";
-import { Action, DeepSeekConfig, IAgent } from "./types";
+import { Action, ChatMessage, DeepSeekConfig, IAgent } from "./types";
 
 export class Agent implements IAgent {
   deepseek: DeepSeekProvider;
@@ -7,12 +7,12 @@ export class Agent implements IAgent {
   temperature?: number;
   maxTokens?: number;
   additionalParams?: Record<string, any>;
-  actions: Record<string, Action>;
+  actions?: Record<string, Action>;
 
   constructor(
     deepseekConfig: DeepSeekConfig,
     personality: string,
-    actions: Record<string, any>
+    actions?: Record<string, any>
   ) {
     this.deepseek = new DeepSeekProvider(deepseekConfig);
     this.personality = personality;
@@ -37,10 +37,7 @@ export class Agent implements IAgent {
     return this;
   }
 
-  async run(
-    prompt: string,
-    chatHistory: { role: string; content: string }[] = []
-  ): Promise<string> {
+  async run(prompt: string, chatHistory: ChatMessage[] = []): Promise<string> {
     try {
       const response = await this.deepseek.completion({
         prompt,
@@ -56,8 +53,17 @@ export class Agent implements IAgent {
       if (response.choice === "message") {
         return response.message;
       } else {
-        const { actionName: name, args } = response;
-        return this.actions[name].handler(args);
+        const { actionName, rawResponse, toolCallId, args } = response;
+
+        if (!this?.actions?.[actionName]) return "Action not found";
+
+        const result = await this.actions[actionName].handler(args);
+
+        return await this.run("format the tool call response", [
+          ...chatHistory,
+          { ...rawResponse.choices[0].message } as ChatMessage,
+          { role: "tool", tool_call_id: toolCallId, content: result },
+        ]);
       }
     } catch (error) {
       throw new Error("Failed to generate chat response");
