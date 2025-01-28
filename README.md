@@ -6,9 +6,9 @@ A TypeScript library for creating AI agents powered by DeepSeek technology.
 
 Install the package using npm:
 
-\`\`\`bash
+bash
 npm install @quad/agent-framework
-\`\`\`
+
 
 ## Basic Usage
 
